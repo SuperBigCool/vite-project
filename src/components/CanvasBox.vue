@@ -3,14 +3,14 @@
     <canvas class="cvs" ref="cvs"></canvas>
     <CanvasInput ref="canvasInput" @confirm="handleInputConfirm" @cancel="handleInputcancel"/>
     <CanvasDropdown v-for="(item, index) in domList" :key="index" :value="item.value" :leftValue="item.x"
-      :topValue="item.y" />
+      :topValue="item.y" :list="item.dropDownList || []" @dropSelect="handleDropSelect"/>
   </div>
 </template>
 
 <script setup>
 import CanvasInput from "./CanvasInput.vue";
 import CanvasDropdown from "./CanvasDropdown.vue";
-import { defineProps, onMounted, ref } from "vue";
+import { defineProps, onMounted, ref,onUnmounted,defineEmits } from "vue";
 
 const props = defineProps({
   data: {
@@ -223,17 +223,19 @@ class Line {
   }
 }
 
+let requestId = null;
+
 /**
  * 绘制所有形状
  */
 const drawAllShapes = () => {
-  requestAnimationFrame(drawAllShapes);
   ctx.clearRect(0, 0, cvs.value.width, cvs.value.height);
   shapes.forEach((item) => {
     item.diagram.forEach((shape) => {
       shape.draw && shape.draw();
     });
   });
+  requestId = requestAnimationFrame(drawAllShapes);
 };
 
 const handleInputConfirm = (value) => {
@@ -246,10 +248,21 @@ const handleInputConfirm = (value) => {
 const handleInputcancel = () =>{
   shapes = [];
 };
+const emit = defineEmits(["selectMenu"]);
+const handleDropSelect = (data)=>{
+  console.log(data, "handleDropSelect");
+  emit("selectMenu", {domValue:props.data,dropSelectValue:data});
+  
+};
 
 onMounted(() => {
   init();
   drawAllShapes();
+});
+onUnmounted(() => {
+  if (requestId) {
+    cancelAnimationFrame(requestId);
+  }
 });
 </script>
 

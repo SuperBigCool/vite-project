@@ -5,7 +5,7 @@
       height: '240px',
     }" :default-current="2" @change="handleChange">
       <a-carousel-item v-for="(item, index) in images" :key="index">
-        <CanvasBox :data="item" :width="600" :height="240"/>
+        <CanvasBox :data="item" :width="600" :height="240" @selectMenu="handleSelectMenu"/>
       </a-carousel-item>
     </a-carousel>
   </div>
@@ -21,7 +21,12 @@ const images = ref([
       {
         x: 100,
         y: 50,
-        value:"123"
+        value:"123",
+        dropDownList:[
+          { label: "Option 1", value: "1" },
+          { label: "Option 2", value: "2" },
+          { label: "Option 3", value: "3" }
+        ]
       },
       {
         x: 200,
@@ -41,6 +46,10 @@ const images = ref([
 const handleChange = (current) => {
   console.log('Current slide:', current);
 };
+const handleSelectMenu = (data)=>{
+  console.log("Selected data:", data);
+  // 这里可以处理选中菜单的逻辑
+}
 </script>
 
 <style scoped></style>

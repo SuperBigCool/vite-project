@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" :style="{ width: '100%',position:'fixed', left: leftValue + 'px', top: topValue + 'px' }"
+  <div v-if="show" :style="{ width: '100%',position:'absolute', left: leftValue + 'px', top: topValue + 'px' }"
     class="canvas-input">
     <a-input v-model="inputValue" :style="{ width: '320px' }" :size="size"
       allow-clear />
